@@ -1,0 +1,76 @@
+/* Style général du body */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #2d2d2d; /* Fond sombre */
+    color: #f5f5f5; /* Texte clair */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Occupe toute la hauteur de l'écran */
+    text-align: center;
+}
+
+/* Conteneur principal */
+.container {
+    background-color: #333; /* Fond plus clair pour le conteneur */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    width: 80%;
+    max-width: 400px;
+}
+
+/* Style du bouton */
+button {
+    background-color: #4CAF50; /* Vert */
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Changement de couleur au survol du bouton */
+button:hover {
+    background-color: #45a049;
+}
+
+/* Style pour le bouton */
+#jokeButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px; /* Espacement en bas du bouton */
+}
+
+#jokeButton:hover {
+    background-color: #45a049;
+}
+
+/* Style pour la section contenant la blague */
+#jokeText {
+    padding: 20px;
+    font-size: 18px;
+    background-color: #020202;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    margin-top: 20px; /* Espacement au-dessus du texte */
+    margin-bottom: 20px; /* Espacement en bas du texte */
+    min-height: 50px; /* Hauteur minimale */
+    text-align: center; /* Centrer le texte */
+    margin-left: 100px;
+}
+/* Style du bouton désactivé */
+button:disabled {
+    background-color: #bbb; /* Couleur grise lorsque le bouton est désactivé */
+    cursor: not-allowed;
+}

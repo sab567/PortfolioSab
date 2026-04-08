@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire Soutien Scolaire</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #fff0f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(255, 107, 157, 0.15); text-align: center; max-width: 400px; width: 100%; border: 1px solid rgba(255, 107, 157, 0.2); }
+        h1 { color: #e84580; font-family: 'Playfair Display', serif; }
+        p { color: #52525b; line-height: 1.6; margin-bottom: 20px; }
+        .placeholder-form { display: flex; flex-direction: column; gap: 10px; }
+        .placeholder-form input, .placeholder-form textarea { width: 100%; padding: 12px; border: 1px solid #ffb3d0; border-radius: 8px; font-family: 'Inter', sans-serif; box-sizing: border-box; }
+        .btn { background: linear-gradient(135deg, #ff6b9d 0%, #7c6bb5 100%); color: white; padding: 12px 20px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 15px rgba(255, 107, 157, 0.35); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Soutien Scolaire</h1>
+        <p>Inscrivez-vous pour bénéficier de notre programme d'accompagnement éducatif.</p>
+        <div class="placeholder-form">
+            <input type="text" placeholder="Nom complet" />
+            <input type="email" placeholder="Adresse email" />
+            <textarea placeholder="Matières souhaitées" rows="3"></textarea>
+            <button class="btn" onclick="alert('Formulaire envoyé avec succès !')">Envoyer</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1356 @@
+<!-- ╔══════════════════════════════════════════════════════════════════════════════╗
+     ║  LA GRANDE DAME SABETHA POOTHAPILLAI                                       ║
+     ║                                                                            ║
+     ║  Hey ! j'ai mis la blinde de commentaires pour bien que tu puisses t'y retrouver ✨                   ║
+     ║                                                                            ║
+     ║  Ce fichier contient TOUTE la structure HTML du site.                       ║
+     ║  Le style visuel est dans → style.css                                      ║
+     ║  Les interactions/animations sont dans → script.js                         ║
+     ║                                                                            ║
+     ║  Les sections du site (dans l'ordre) :                                     ║
+     ║  01. À propos — qui tu es et ce que tu fais                              ║
+     ║  02. Expériences — tes stages et emplois                                   ║
+     ║  03. Formation — ton parcours scolaire                                     ║
+     ║  04. Compétences & Langues — ce que tu sais faire                          ║
+     ║  05. Projets — tes réalisations                                            ║
+     ║  06. Certifications — tes certifications                                   ║
+     ║  07. Veille Technologique — bah ta veille du coup           ║
+     ║  08. Stages — rapports de stage (avec PDF intégrés)                        ║
+     ║  09. Fiche de Synthèse — tableau récapitulatif BTS SIO    (tu devras le completer ta fiche de synthèse)                 ║
+     ║  10. Contact — formulaire via Formspree                                    ║
+     ║                                                                            ║
+     ╚══════════════════════════════════════════════════════════════════════════════╝ -->
+
+<!DOCTYPE html>
+<!-- lang="fr" → dit aux navigateurs et moteurs de recherche que le site est en français -->
+<html lang="fr">
+
+<!-- ═══════════════ HEAD (la partie invisible du site) ═══════════════ 
+     Tout ce qui est dans <head> ne s'affiche PAS sur la page.
+     C'est les "coulisses" : polices, styles, métadonnées, SEO, etc. -->
+
+<head>
+  <!-- charset UTF-8 → permet d'afficher les accents français (é, è, ê, etc.) -->
+  <meta charset="UTF-8">
+  <!-- viewport → rend le site responsive (adapté aux téléphones) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Le titre qui s'affiche dans l'onglet du navigateur -->
+  <title>Sab</title>
+  <!-- SEO : la description qui apparaît dans les résultats Google, pas très utile sur le cas présent mais c'est toujours mieux d'etre propre -->
+  <meta name="description"
+    content="Portfolio de Sabetha Poothapillai, étudiante en BTS SIO SLAM, future développeuse front-end.">
+  <meta name="author" content="Sabetha Poothapillai">
+  <!-- Google Fonts : on charge deux polices personnalisées
+       - Playfair Display → police élégante pour les titres (avec empattements)
+       - Inter → police moderne et lisible pour le texte courant (sans empattements)
+       preconnect = on se connecte à Google Fonts en avance pour charger plus vite -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <!-- Notre feuille de style perso — tout le design du site est là-dedans -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ═══════════════ NAVIGATION ═══════════════ 
+       La barre de navigation fixe en haut de la page.
+       - Elle reste visible quand tu scrolles (position: fixed en CSS)
+       - Le logo "S.P" ramène au début de la page
+       - Le bouton hamburger (3 barres) apparaît sur mobile uniquement
+       - Chaque lien pointe vers une section via son id (#about, #experience, etc.)
+       - Le lien "Contact" a un style spécial (bouton coloré) via la classe nav-link--cta
+       
+       💡 Le JavaScript dans script.js gère :
+          → Le changement de style au scroll (fond blanc + ombre)
+          → Le surlignage du lien de la section visible
+          → L'ouverture/fermeture du menu hamburger sur mobile
+  -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <!-- Logo : les lettres S et P avec un point rose au milieu -->
+      <a href="#hero" class="nav-logo">S<span class="logo-dot">.</span>P</a>
+
+      <!-- Bouton hamburger pour mobile — les 3 <span> = les 3 barres
+           aria-label="Menu" → pour l'accessibilité (les lecteurs d'écran) -->
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Les liens de navigation — chaque href pointe vers l'id d'une section -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about" class="nav-link">À propos</a></li>
+        <li><a href="#experience" class="nav-link">Expériences</a></li>
+        <li><a href="#education" class="nav-link">Formation</a></li>
+        <li><a href="#skills" class="nav-link">Compétences</a></li>
+        <li><a href="#projects" class="nav-link">Projets</a></li>
+        <li><a href="#certifications" class="nav-link">Certifications</a></li>
+        <li><a href="#veille" class="nav-link">Veille</a></li>
+        <li><a href="#stages" class="nav-link">Stages</a></li>
+        <li><a href="#synthese" class="nav-link">Synthèse</a></li>
+        <li><a href="#contact" class="nav-link nav-link--cta">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ HERO ═══════════════ 
+       C'est la toute première chose qu'on voit en arrivant sur le site
+       La grande section d'accueil avec le nom, le titre et les boutons.
+       
+       Effets visuels (qui sont gérés par script.js + style.css) :
+       - hero-particles → des petits points colorés qui flottent (créés en JS)
+       - hero-bg-shapes → 3 formes géométriques floues qui bougent avec la souris (parallax)
+       - hero-greeting → effet machine à écrire ("Bonjour, je suis" apparaît lettre par lettre)
+       - hero-scroll-indicator → la petite ligne animée en bas qui dit "scrolle !" 
+  -->
+  <section class="hero" id="hero">
+    <!-- Conteneur pour les particules flottantes (remplies par JavaScript) -->
+    <div class="hero-particles" id="heroParticles"></div>
+
+    <!-- Les 3 formes géométriques en arrière-plan (cercles flous rose/violet) 
+         Elles bougent quand on déplace la souris → effet parallax 3D -->
+    <div class="hero-bg-shapes">
+      <div class="shape shape--1"></div>
+      <div class="shape shape--2"></div>
+      <div class="shape shape--3"></div>
+    </div>
+
+    <!-- Le contenu principal du hero -->
+    <div class="hero-content">
+      <!-- Ce texte s'anime avec l'effet "machine à écrire" au chargement -->
+      <p class="hero-greeting">Bonjour, je suis</p>
+      <!-- Le nom en gros — hero-name--accent donne la couleur rose/violet au nom de famille -->
+      <h1 class="hero-name">Sabetha<br><span class="hero-name--accent">Poothapillai</span></h1>
+      <p class="hero-title">Étudiante en <strong>BTS SIO SLAM</strong> à l'ENC Bessières, Paris</p>
+      <p class="hero-subtitle">Future développeuse front-end passionnée par le design et le code.</p>
+      <!-- Boutons d'action : btn--primary = bouton plein, btn--outline = bouton contour -->
+      <div class="hero-actions">
+        <a href="#about" class="btn btn--primary">Découvrir mon profil</a>
+        <a href="#contact" class="btn btn--outline">Me contacter</a>
+      </div>
+      <!-- Indicateur de scroll animé (la petite ligne qui pulse en bas) -->
+      <div class="hero-scroll-indicator">
+        <div class="scroll-line"></div>
+      </div>
+  </section>
+
+  <!-- ═══════════════ À PROPOS ═══════════════
+       Section 01 — Présentation personnelle.
+       
+       Structure :
+       - section-header → le numéro "01", le titre et la ligne décorative
+       - about-grid → mise en page en 2 colonnes (image + texte)
+       - about-image → placeholder avec mes initiales "SP" (en attendant une vraie photo)
+       - about-text → description + détails (localisation, formation, école)
+       
+       💡 La classe "reveal" sur un élément = il apparaîtra avec une animation 
+          quand on scrolle jusqu'à lui (géré par l'IntersectionObserver dans script.js)
+  -->
+  <section class="section about" id="about">
+    <div class="container">
+      <!-- En-tête de section : numéro + titre + ligne décorative (motif répété dans toutes les sections) -->
+      <div class="section-header reveal">
+        <span class="section-tag">01</span>
+        <h2 class="section-title">À propos de moi</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="about-grid">
+        <!-- Côté gauche : la photo (pour l'instant c'est un placeholder avec mes initiales) -->
+        <div class="about-image reveal">
+          <div class="about-image-frame">
+            <div class="about-image-placeholder">
+              <span class="about-initials">SP</span>
+            </div>
+            <!-- Décoration derrière l'image (le rectangle décalé rose/violet) -->
+            <div class="image-decoration"></div>
+          </div>
+        </div>
+        <!-- Côté droit : le texte de présentation + détails -->
+        <div class="about-text reveal">
+          <h3 class="about-headline">Passionnée par le développement front-end</h3>
+          <p>Mon rêve serait de devenir <strong>développeuse front-end</strong>. Ce métier a pour mission de concevoir
+            la partie visible d'un site en optimisant l'ergonomie d'une interface web, afin de permettre aux
+            utilisateurs une navigation plus fluide et simple.</p>
+          <p>Il faut également veiller à faire la liaison entre la partie design (HTML, CSS) et la gestion des données
+            du back-office (JavaScript / serveur). C'est cette combinaison de créativité et de technique qui me
+            passionne.</p>
+          <div class="about-details">
+            <div class="about-detail">
+              <span class="detail-label">Localisation</span>
+              <span class="detail-value">Paris, France</span>
+            </div>
+            <div class="about-detail">
+              <span class="detail-label">Formation</span>
+              <span class="detail-value">BTS SIO SLAM</span>
+            </div>
+            <div class="about-detail">
+              <span class="detail-label">École</span>
+              <span class="detail-value">ENC Bessières</span>
+            </div>
+          </div>
+          <a href="#contact" class="btn btn--primary">Me contacter</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ EXPÉRIENCES ═══════════════
+       Section 02 — Mes expériences professionnelles (stages, emplois).
+       
+       Présenté sous forme de timeline (chronologie verticale) :
+       - timeline-item → chaque expérience est un point sur la frise
+       - timeline-marker → le petit cercle sur la ligne verticale
+       - timeline-content → la carte avec les infos (date, poste, entreprise, description)
+       - timeline-tags → les petites étiquettes de compétences associées
+  -->
+  <section class="section experience" id="experience">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">02</span>
+        <h2 class="section-title">Expériences professionnelles</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item reveal">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">Janvier — Février 2026</span>
+            <h3 class="timeline-role">Stage de 6 semaines — Association</h3>
+            <h4 class="timeline-company">Keur Kamer, Paris 13e</h4>
+            <p>Création d'un site web en React. Développement front-end
+              moderne, mise en place de l'interface utilisateur et déploiement du projet.</p>
+            <div class="timeline-tags">
+              <span class="tag">React</span>
+              <span class="tag">JavaScript</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">Mai-Juin 2025</span>
+            <h3 class="timeline-role">Stage de 5 semaines — Développement web</h3>
+            <h4 class="timeline-company">ENC Bessières, Paris 17e</h4>
+            <p> Création formulaire d'inscription en ligne en binôme pour les étuidants de l'ENC Bessières.</p>
+            <div class="timeline-tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">PHP</span>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="timeline-item reveal">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">Avril 2023</span>
+            <h3 class="timeline-role">Stage d'un mois — Cabinet Comptable</h3>
+            <h4 class="timeline-company">ECAS, Paris 11e</h4>
+            <p>Saisie comptable, rapprochement bancaire, suivi, lettrage, déclaration de TVA. Utilisation du logiciel
+              CEGID Quadra.</p>
+            <div class="timeline-tags">
+              <span class="tag">Comptabilité</span>
+              <span class="tag">CEGID Quadra</span>
+              <span class="tag">TVA</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">2022</span>
+            <h3 class="timeline-role"> Employée Polyvalente</h3>
+            <h4 class="timeline-company">Hôtel Mercure, Paris 75011</h4>
+            <p>Accueil des clients, gestion du buffet petit-déjeuner (présentation, réapprovisionnement, animation),
+              débarrassage, remise en place, nettoyage et préparation du buffet pour le lendemain.</p>
+            <div class="timeline-tags">
+              <span class="tag">Hôtellerie</span>
+              <span class="tag">Service client</span>
+              <span class="tag">Polyvalence</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FORMATION ═══════════════
+       Section 03 — Mon parcours scolaire.
+       
+       Affiché sous forme de grille de "cartes" (edu-card) :
+       - Chaque carte = une formation avec l'année, le titre, l'école et une icône
+       - edu-year → la période (ex: "2023 — 2024")
+       - edu-icon → icône SVG (chapeau de diplôme ou symbole code)
+       
+       Les cartes apparaissent en cascade grâce au stagger dans script.js
+  -->
+  <section class="section education" id="education">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">03</span>
+        <h2 class="section-title">Formation</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="education-grid">
+        <div class="edu-card reveal">
+          <div class="edu-year">2023 — 2024</div>
+          <h3 class="edu-title">BTS SIO option SLAM</h3>
+          <p class="edu-school">GRETA METEHOR — ENC Bessières, Paris</p>
+          <div class="edu-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28">
+              <path fill="currentColor"
+                d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="edu-card reveal">
+          <div class="edu-year">2022 — 2023</div>
+          <h3 class="edu-title">Secrétaire Comptable</h3>
+          <p class="edu-school">Afpa de Paris</p>
+          <div class="edu-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28">
+              <path fill="currentColor"
+                d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="edu-card reveal">
+          <div class="edu-year">Avril — Mai 2022</div>
+          <h3 class="edu-title">DIGISTART — Introduction au Code</h3>
+          <p class="edu-school">Association KONEXIO, Paris</p>
+          <div class="edu-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28">
+              <path fill="currentColor"
+                d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="edu-card reveal">
+          <div class="edu-year">2020 — 2021</div>
+          <h3 class="edu-title">DU Paréo</h3>
+          <p class="edu-school">Université de Paris</p>
+          <p class="edu-desc">Formation d'aide à la réflexion et à l'orientation sur le projet d'étude et professionnel.
+          </p>
+          <div class="edu-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28">
+              <path fill="currentColor"
+                d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="edu-card reveal">
+          <div class="edu-year">Juillet 2020</div>
+          <h3 class="edu-title">Baccalauréat ES</h3>
+          <p class="edu-school">Diplôme obtenu</p>
+          <div class="edu-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28">
+              <path fill="currentColor"
+                d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ COMPÉTENCES & LANGUES ═══════════════
+       Section 04 — Ce que je sais faire.
+       
+       Divisé en 3 colonnes :
+       1. Langues → avec des barres de progression animées (skill-bar-fill)
+          Les barres se remplissent quand on scrolle jusqu'à elles (script.js)
+          Le pourcentage est défini via l'attribut data-width
+       2. Techniques → tags/badges des technologies (HTML5, CSS3, JS, etc.)
+       3. Soft Skills → tags des compétences humaines (autonomie, rigueur, etc.)
+       
+       Les tags apparaissent en cascade grâce au stagger animation
+  -->
+  <section class="section skills" id="skills">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">04</span>
+        <h2 class="section-title">Compétences & Langues</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="skills-grid">
+        <div class="skills-column reveal">
+          <h3 class="skills-subtitle">Langues</h3>
+          <div class="skill-bar-item">
+            <div class="skill-bar-header">
+              <span class="skill-name">Français</span>
+              <span class="skill-level">Bilingue</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-width="100"></div>
+            </div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-header">
+              <span class="skill-name">Tamil</span>
+              <span class="skill-level">Bilingue</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-width="100"></div>
+            </div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-header">
+              <span class="skill-name">Anglais</span>
+              <span class="skill-level">Intermédiaire</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-width="60"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="skills-column reveal">
+          <h3 class="skills-subtitle">Techniques</h3>
+          <div class="skills-tags">
+            <span class="skill-tag">HTML5</span>
+            <span class="skill-tag">CSS3</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">WordPress</span>
+            <span class="skill-tag">PHP</span>
+            <span class="skill-tag">SQL</span>
+            <span class="skill-tag">Git</span>
+            <span class="skill-tag">VS Code</span>
+            <span class="skill-tag">Responsive Design</span>
+            <span class="skill-tag">CEGID Quadra</span>
+          </div>
+        </div>
+
+        <div class="skills-column reveal">
+          <h3 class="skills-subtitle">Soft Skills</h3>
+          <div class="skills-tags">
+            <span class="skill-tag">Autonomie</span>
+            <span class="skill-tag">Travail en équipe</span>
+            <span class="skill-tag">Rigueur</span>
+            <span class="skill-tag">Curiosité</span>
+            <span class="skill-tag">Adaptabilité</span>
+            <span class="skill-tag">Sens du service</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ PROJETS ═══════════════ 
+       Section 05 — Mes réalisations.
+       
+       Chaque projet est une "carte" (project-card) avec :
+       - project-image → un fond gradient coloré + une icône SVG
+         (en attendant de vraies captures d'écran des projets)
+       - project-overlay → le texte "Voir le projet" qui apparaît au survol
+       - project-info → année, titre, description, technologies utilisées
+       
+       💡 Les cartes ont un effet 3D tilt au survol de la souris (script.js)
+         Elles s'inclinent légèrement dans la direction de ta souris 
+
+         evidemment, il faudra mettre de vraies captures d'écran des projets, et un lien vers le projet en lui même, t'a pas a t'en faire pour ça, je t'aiderai a le faire.
+  -->
+  <section class="section projects" id="projects">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">05</span>
+        <h2 class="section-title">Mes Projets</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card reveal">
+          <div class="project-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <a href="soutien/index.html" target="_blank" class="project-overlay">
+              <span class="project-view">Voir le projet</span>
+            </a>
+            <div class="project-icon-bg">
+              <svg viewBox="0 0 24 24" width="48" height="48">
+                <path fill="rgba(255,255,255,0.3)"
+                  d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+              </svg>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-year">2022</span>
+            <h3 class="project-title">Formulaire Soutien Scolaire</h3>
+            <p class="project-desc">Formulaire interactif de soutien scolaire avec validation des champs et interface
+              conviviale.</p>
+            <div class="project-tech">
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <a href="gateau/index.html" target="_blank" class="project-overlay">
+              <span class="project-view">Voir le projet</span>
+            </a>
+            <div class="project-icon-bg">
+              <svg viewBox="0 0 24 24" width="48" height="48">
+                <path fill="rgba(255,255,255,0.3)"
+                  d="M8.1 13.34l2.83-2.83L3.91 3.5a4.008 4.008 0 000 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z" />
+              </svg>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-year">2022</span>
+            <h3 class="project-title">Recette de Gâteau</h3>
+            <p class="project-desc">Page web présentant une recette de biscuits avec un design soigné et des étapes
+              détaillées.</p>
+            <div class="project-tech">
+              <span>HTML</span>
+              <span>CSS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <a href="TP-METEO/meteo.html" target="_blank" class="project-overlay">
+              <span class="project-view">Voir le projet</span>
+            </a>
+            <div class="project-icon-bg">
+              <svg viewBox="0 0 24 24" width="48" height="48">
+                <path fill="rgba(255,255,255,0.3)"
+                  d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h.71C7.37 7.69 9.48 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3s-1.34 3-3 3z" />
+              </svg>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-year">2025</span>
+            <h3 class="project-title">Application Météo</h3>
+            <p class="project-desc">Application affichant la météo en temps réel avec appel à une API externe et
+              interface dynamique.</p>
+            <div class="project-tech">
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
+              <span>API</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+            <a href="jokes_api/index.html" target="_blank" class="project-overlay">
+              <span class="project-view">Voir le projet</span>
+            </a>
+            <div class="project-icon-bg">
+              <svg viewBox="0 0 24 24" width="48" height="48">
+                <path fill="rgba(255,255,255,0.3)"
+                  d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" />
+              </svg>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-year">2025</span>
+            <h3 class="project-title">Générateur de Blagues</h3>
+            <p class="project-desc">Application qui génère des blagues aléatoires via une API, avec un design ludique et
+              responsif.</p>
+            <div class="project-tech">
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
+              <span>API</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-image" style="background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%);">
+            <a href="Calculette Interface Graphique/Calculatrice.java" target="_blank" class="project-overlay">
+              <span class="project-view">Voir le code</span>
+            </a>
+            <div class="project-icon-bg">
+              <svg viewBox="0 0 24 24" width="48" height="48">
+                <path fill="rgba(255,255,255,0.3)"
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8 14H7v-2h4v2zm0-4H7v-2h4v2zm6 4h-4v-2h4v2zm0-4h-4v-2h4v2zm0-5H7V5h10v3z" />
+              </svg>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-year">2025</span>
+            <h3 class="project-title">Calculatrice Graphique</h3>
+            <p class="project-desc">Application développée en Java avec une interface graphique interactive.</p>
+            <div class="project-tech">
+              <span>Java</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div class="project-image" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
+            <a href="projets/" target="_blank" class="project-overlay">
+              <span class="project-view">Voir les algorithmes</span>
+            </a>
+            <div class="project-icon-bg">
+              <svg viewBox="0 0 24 24" width="48" height="48">
+                <path fill="rgba(255,255,255,0.3)"
+                  d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
+              </svg>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-year">2025</span>
+            <h3 class="project-title">Algorithmes Java</h3>
+            <p class="project-desc">Suite de mini-jeux et algorithmes (Interville, Tri à bulle) en ligne de commande.
+            </p>
+            <div class="project-tech">
+              <span>Java</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <div class="project-card reveal">
+          <div class="project-image" style="background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%);">
+            <a href="greg city.pdf" target="_blank" class="project-overlay">
+              <span class="project-view">Voir le projet greg city</span>
+              </span>
+            </a>
+            <div class="project-icon-bg">
+              <svg viewBox="0 0 24 24" width="48" height="48">
+                <path fill="rgba(255,255,255,0.3)"
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8 14H7v-2h4v2zm0-4H7v-2h4v2zm6 4h-4v-2h4v2zm0-4h-4v-2h4v2zm0-5H7V5h10v3z" />
+              </svg>
+            </div>
+          </div>
+          <div class="project-info">
+            <span class="project-year">2024</span>
+            <h3 class="project-title">Greg City</h3>
+            <p class="project-desc">maquetage d'un environemment d'entreprise </p>
+            <div class="project-tech">
+              <span>Visio</span>
+            </div>
+          </div>
+        </div>
+
+  </section>
+
+  <!-- ═══════════════ CERTIFICATIONS ═══════════════ -->
+  <section class="section certifications" id="certifications" style="position: relative; overflow: hidden;">
+    <!-- Formes animées d'arrière-plan -->
+    <div class="shape shape--1"
+      style="width: 300px; height: 300px; top: -50px; left: -50px; z-index: 0; opacity: 0.25;"></div>
+    <div class="shape shape--3"
+      style="width: 250px; height: 250px; bottom: -50px; right: 5%; animation-duration: 25s; z-index: 0; opacity: 0.25;">
+    </div>
+
+    <div class="container" style="position: relative; z-index: 1;">
+      <div class="section-header reveal">
+        <span class="section-tag">06</span>
+        <h2 class="section-title">Certifications</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="certifications-grid">
+        <!-- SecNum Academy -->
+        <div class="cert-card-new cert-secnum reveal">
+          <div class="cert-bg-animation"></div>
+          <div class="cert-content">
+            <div class="cert-icon">
+              <svg viewBox="0 0 24 24" width="32" height="32">
+                <path fill="currentColor"
+                  d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+              </svg>
+            </div>
+            <h3 class="cert-title">SecNum Academy</h3>
+            <p class="cert-school">ANSSI</p>
+            <p class="cert-desc">Sensibilisation à la sécurité des systèmes d'information, la gestion des risques et aux
+              bonnes pratiques de la cybersécurité.</p>
+          </div>
+        </div>
+
+        <!-- Python Essentials -->
+        <div class="cert-card-new cert-python reveal">
+          <div class="cert-bg-animation"></div>
+          <div class="cert-content">
+            <div class="cert-icon">
+              <svg viewBox="0 0 118 118" width="32" height="32">
+                <path fill="currentColor"
+                  d="M58.4 1.4c-28.5 0-27.2 12.3-27.2 12.3l.1 12.8h27.6v3.9H31.5S1.4 30.6 1.4 58.6s28.4 28.5 28.4 28.5h8.9v-12.6s-.1-14.7 14.8-14.7h26.7s14.2 0 14.2-13.8V31.5s1.4-30.1-26-30.1h-10zm-9.3 8.3c2.6 0 4.7 2.1 4.7 4.7 0 2.6-2.1 4.7-4.7 4.7-2.6 0-4.7-2.1-4.7-4.7 0-2.6 2.1-4.7 4.7-4.7zm59.2 19.3s-28.4 0-28.4 28.5h-9v12.6s.1 14.7-14.8 14.7H31.5s-14.2 0-14.2 13.8v14.4s-1.4 30.1 26 30.1h10c28.5 0 27.2-12.3 27.2-12.3l-.1-12.8H51.4v-3.9h27.4s30.1-.2 30.1-28.2-28.4-28.5-28.4-28.5h-9v-12.6s.1-14.7 14.8-14.7H106.6s14.2 0 14.2-13.8V43.5s1.4-30.1-26-30.1zm8 8.4c-2.6 0-4.7 2.1-4.7 4.7 0 2.6 2.1 4.7 4.7 4.7 2.6 0 4.7-2.1 4.7-4.7 0-2.6-2.1-4.7-4.7-4.7z" />
+              </svg>
+            </div>
+            <h3 class="cert-title">Python Essentials 1 & 2</h3>
+            <p class="cert-school">Cisco Networking Academy</p>
+            <p class="cert-desc">Fondamentaux du langage Python, les structures de données, l'algorithmie et la
+              programmation orientée objet.</p>
+          </div>
+        </div>
+
+        <!-- RGPD -->
+        <div class="cert-card-new cert-rgpd reveal">
+          <div class="cert-bg-animation"></div>
+          <div class="cert-content">
+            <div class="cert-icon">
+              <svg viewBox="0 0 24 24" width="32" height="32">
+                <path fill="currentColor"
+                  d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+              </svg>
+            </div>
+            <h3 class="cert-title">Numérique Éthique (RGPD)</h3>
+            <p class="cert-school">CNIL</p>
+            <p class="cert-desc">Sensibilisation à l'éthique numérique, la vie privée et les principes du RGPD pour
+              concevoir avec la protection des données en tête.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ VEILLE TECHNOLOGIQUE ═══════════════
+       Section 07 — La veille technologique sur l'IA et le bien-être au travail.
+  -->
+  <section class="section veille" id="veille">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">07</span>
+        <h2 class="section-title">Veille Technologique</h2>
+        <div class="section-line"></div>
+      </div>
+
+      <!-- La question centrale de la veille -->
+      <div class="veille-question reveal">
+        <p>En quoi l'intelligence artificielle peut-elle contribuer au bien-être des salariés au travail ?</p>
+      </div>
+
+      <!-- Début du carrousel -->
+      <div class="veille-carousel" id="veilleCarousel">
+        <div class="veille-pages-wrapper">
+
+          <!-- ══════ PAGE 1 ══════ 
+               Articles les plus récents (Nov 2025 - Avr 2025) -->
+          <div class="veille-page active" data-page="0">
+            <div class="veille-timeline">
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2025</span>
+                  <span class="veille-date">10 novembre 2025</span>
+                  <h3>IA capacitante : renforcer l'autonomie au travail</h3>
+                  <p>Le concept d'« IA capacitante » émerge : une IA conçue avec et pour les salariés, qui renforce
+                    les compétences, l'autonomie et la qualité de vie au travail plutôt que de générer de la pression
+                    ou de la surveillance algorithmique.</p>
+                  <a href="https://iasantetravail.com/" target="_blank" rel="noopener" class="veille-link">IA Santé
+                    Travail — IA capacitante →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2025</span>
+                  <span class="veille-date">5 novembre 2025</span>
+                  <h3>McKinsey : l'état de l'IA et son impact sur le travail</h3>
+                  <p>Le rapport annuel de McKinsey sur l'état de l'IA en 2024 montre que l'adoption de l'IA générative
+                    s'accélère, avec des impacts directs sur la productivité, la charge cognitive et la satisfaction
+                    des collaborateurs.</p>
+                  <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai"
+                    target="_blank" rel="noopener" class="veille-link">McKinsey — The State of AI →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2025</span>
+                  <span class="veille-date">28 août 2025</span>
+                  <h3>Étude Jabra : l'IA booste le bien-être des salariés</h3>
+                  <p>L'étude de Jabra et du Happiness Research Institute révèle que les utilisateurs fréquents d'IA
+                    affichent une satisfaction au travail 34 % plus élevée, davantage d'optimisme et de motivation,
+                    mais aussi 20 % de stress en plus lié à la maîtrise de ces outils.</p>
+                  <a href="https://www.myhappyjob.fr/lintelligence-artificielle-pourrait-bien-avoir-un-impact-sur-le-bien-etre-au-travail/"
+                    target="_blank" rel="noopener" class="veille-link">MyHappyJob — IA et bien-être au travail →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2025</span>
+                  <span class="veille-date">12 juin 2025</span>
+                  <h3>Les Echos : l'IA au service de la prévention en entreprise</h3>
+                  <p>Les Echos analyse comment les entreprises déploient l'IA pour prévenir les problèmes de
+                    santé mentale au travail, via des chatbots de coaching, des outils immersifs et des
+                    programmes de bien-être personnalisés alimentés par l'intelligence artificielle.</p>
+                  <a href="https://www.lesechos.fr/thema/articles/sante-mentale-lia-au-service-de-la-prevention-en-entreprise-2170296"
+                    target="_blank" rel="noopener" class="veille-link">Les Echos — IA et prévention santé mentale →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2025</span>
+                  <span class="veille-date">23 avril 2025</span>
+                  <h3>OIT : l'IA et la numérisation au service de la santé au travail</h3>
+                  <p>L'Organisation internationale du Travail publie un rapport majeur sur le rôle de l'IA et de la
+                    numérisation dans la sécurité et la santé au travail, soulignant les opportunités pour améliorer
+                    le bien-être des travailleurs tout en alertant sur les nouveaux risques psychosociaux.</p>
+                  <a href="https://www.ilo.org/publications/revolutionizing-health-and-safety-role-ai-and-digitalization-work"
+                    target="_blank" rel="noopener" class="veille-link">OIT — IA et santé au travail →</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ══════ PAGE 2 ══════
+               Articles de Avr 2025 - Août 2024 -->
+          <div class="veille-page" data-page="1">
+            <div class="veille-timeline">
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2025</span>
+                  <span class="veille-date">avril 2025</span>
+                  <h3>Gallup : état du bien-être au travail dans le monde</h3>
+                  <p>Le rapport Gallup sur l'état du lieu de travail mondial montre que le désengagement coûte
+                    438 milliards de dollars. L'IA peut aider à mesurer et améliorer le bien-être en temps
+                    réel en identifiant les signaux faibles de mal-être.</p>
+                  <a href="https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx" target="_blank"
+                    rel="noopener" class="veille-link">Gallup — State of the Global Workplace →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2025</span>
+                  <span class="veille-date">14 janvier 2025</span>
+                  <h3>Vie-publique : controverses IA, travail et emploi</h3>
+                  <p>La Documentation française publie une analyse des controverses autour de l'intelligence
+                    artificielle, du travail et de l'emploi, examinant les impacts sur les conditions de travail,
+                    le dialogue social et le bien-être des salariés face à l'automatisation.</p>
+                  <a href="https://www.vie-publique.fr/rapport/297404-analyse-de-controverses-intelligence-artificielle-travail-et-emploi"
+                    target="_blank" rel="noopener" class="veille-link">Vie-publique — IA, travail et emploi →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2024</span>
+                  <span class="veille-date">novembre 2024</span>
+                  <h3>WEF : Digital Health & AI pour le bien-être des employés</h3>
+                  <p>Le Forum Économique Mondial publie un rapport sur la santé numérique et l'IA, explorant
+                    comment ces technologies inaugurent une nouvelle ére pour le bien-être des employés, entre
+                    programmes personnalisés et détection précoce des risques psychosociaux.</p>
+                  <a href="https://reports.weforum.org/docs/WEF_Digital_Health_and_AI_2024.pdf" target="_blank"
+                    rel="noopener" class="veille-link">WEF — Digital Health & AI 2024 →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2024</span>
+                  <span class="veille-date">24 septembre 2024</span>
+                  <h3>IA et RPS : les nouveaux risques psychosociaux au travail</h3>
+                  <p>L'intégration de l'IA fait émerger de nouveaux risques psychosociaux : technostress, épuisement
+                    adaptatif, peur du remplacement. Les entreprises doivent repenser leurs pratiques managériales
+                    pour préserver le bien-être de leurs collaborateurs.</p>
+                  <a href="https://www.forbes.com/sites/bernardmarr/2024/09/24/the-10-biggest-ai-trends-of-2025-everyone-must-be-ready-for-today/"
+                    target="_blank" rel="noopener" class="veille-link">Forbes — Tendances IA 2025 →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2024</span>
+                  <span class="veille-date">20 août 2024</span>
+                  <h3>L'IA au service de la gestion du bien-être en entreprise</h3>
+                  <p>Comment l'intelligence artificielle transforme la gestion du bien-être des employés : programmes
+                    personnalisés, détection précoce du burnout, automatisation des tâches répétitives et amélioration
+                    de l'expérience collaborateur au quotidien.</p>
+                  <a href="https://www.vorecol.com/blogs/blog-how-artificial-intelligence-is-transforming-employee-wellness-management-91291"
+                    target="_blank" rel="noopener" class="veille-link">Vorecol — IA et bien-être employés →</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ══════ PAGE 3 ══════
+               Articles de Mai 2024 - Nov 2023 -->
+          <div class="veille-page" data-page="2">
+            <div class="veille-timeline">
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2024</span>
+                  <span class="veille-date">8 mai 2024</span>
+                  <h3>Microsoft : l'IA au travail est là, la suite sera plus difficile</h3>
+                  <p>Le rapport Work Trend Index 2024 de Microsoft révèle que 75 % des travailleurs utilisent déjà
+                    l'IA. Les entreprises doivent aller au-delà de l'expérimentation pour favoriser l'adoption large
+                    et améliorer l'expérience collaborateur.</p>
+                  <a href="https://www.microsoft.com/en-us/worklab/work-trend-index/ai-at-work-is-here-now-comes-the-hard-part"
+                    target="_blank" rel="noopener" class="veille-link">Microsoft WorkLab — Work Trend Index →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2024</span>
+                  <span class="veille-date">5 avril 2024</span>
+                  <h3>Cairn.info : IA et transformation du travail humain</h3>
+                  <p>La revue académique Cairn.info publie une analyse approfondie de l'impact de l'intelligence
+                    artificielle sur la transformation du travail, les compétences humaines et le bien-être
+                    psychologique des salariés dans les organisations.</p>
+                  <a href="https://www.cairn.info/revue-sante-publique-2024-1.htm" target="_blank" rel="noopener"
+                    class="veille-link">Cairn.info — IA et travail →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2024</span>
+                  <span class="veille-date">18 janvier 2024</span>
+                  <h3>IA et gouvernance éthique en entreprise</h3>
+                  <p>L'OMS publie de nouvelles recommandations sur l'éthique et la gouvernance des modèles d'IA
+                    multimodaux, soulignant l'importance de la transparence, de l'équité et de la protection de la
+                    santé publique, y compris en milieu professionnel.</p>
+                  <a href="https://www.who.int/news/item/18-01-2024-who-releases-ai-ethics-and-governance-guidance-for-large-multi-modal-models"
+                    target="_blank" rel="noopener" class="veille-link">OMS — Gouvernance éthique de l'IA →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2023</span>
+                  <span class="veille-date">29 novembre 2023</span>
+                  <h3>Eurofound : le droit à la déconnexion face au numérique</h3>
+                  <p>L'agence Eurofound publie une étude sur l'impact des politiques de droit à la déconnexion en
+                    Europe, soulignant l'importance de protéger le temps de repos des salariés dans un contexte de
+                    numérisation croissante par l'IA.</p>
+                  <a href="https://www.eurofound.europa.eu/en/publications/2023/right-disconnect-implementation-and-impact-company-level"
+                    target="_blank" rel="noopener" class="veille-link">Eurofound — Droit à la déconnexion →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2023</span>
+                  <span class="veille-date">9 novembre 2023</span>
+                  <h3>Travail.gouv.fr : déploiement de l'IA dans les organisations</h3>
+                  <p>Le ministère du Travail publie les résultats de LaborIA sur le déploiement de l'IA
+                    dans les organisations, analysant son impact sur l'autonomie, le sens du travail et les
+                    compétences des salariés, ainsi que les enjeux pour le dialogue social.</p>
+                  <a href="https://travail-emploi.gouv.fr/le-deploiement-de-lia-dans-les-organisations-et-son-utilisation-dans-les-recrutements"
+                    target="_blank" rel="noopener" class="veille-link">Travail.gouv.fr — IA et organisations →</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ══════ PAGE 4 ══════
+               Articles de Août 2023 - Juin 2021 -->
+          <div class="veille-page" data-page="3">
+            <div class="veille-timeline">
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2023</span>
+                  <span class="veille-date">28 août 2023</span>
+                  <h3>ChatGPT Enterprise : la productivité au service du bien-être</h3>
+                  <p>Le lancement de ChatGPT Enterprise permet aux salariés de rédiger des rapports, analyser des
+                    données et brainstormer plus rapidement, réduisant la surcharge cognitive liée aux tâches
+                    complexes et répétitives.</p>
+                  <a href="https://openai.com/index/introducing-chatgpt-enterprise/" target="_blank" rel="noopener"
+                    class="veille-link">OpenAI — ChatGPT Enterprise →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2023</span>
+                  <span class="veille-date">8 juin 2023</span>
+                  <h3>L'UE encadre l'IA en milieu professionnel</h3>
+                  <p>Le Parlement européen adopte l'AI Act, encadrant l'utilisation de l'IA au travail pour protéger les
+                    droits des employés, notamment contre la surveillance excessive et les biais algorithmiques
+                    dans le recrutement et la gestion.</p>
+                  <a href="https://www.europarl.europa.eu/topics/en/article/20230601STO93804/eu-ai-act-first-regulation-on-artificial-intelligence"
+                    target="_blank" rel="noopener" class="veille-link">Parlement Européen — AI Act →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2023</span>
+                  <span class="veille-date">16 mai 2023</span>
+                  <h3>OMS : recommandations éthiques pour l'IA en santé</h3>
+                  <p>L'Organisation mondiale de la santé publie plus de 40 recommandations sur l'éthique et la
+                    gouvernance des modèles d'IA multimodaux dans le domaine de la santé, couvrant la sécurité,
+                    la transparence et la protection des données personnelles des travailleurs.</p>
+                  <a href="https://www.who.int/news/item/16-05-2023-who-calls-for-safe-and-ethical-ai-for-health"
+                    target="_blank" rel="noopener" class="veille-link">OMS — IA sûre et éthique →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2022</span>
+                  <span class="veille-date">novembre 2022</span>
+                  <h3>INRS : l'IA au service de la santé et sécurité au travail</h3>
+                  <p>L'Institut national de recherche et de sécurité publie une synthèse prospective sur l'impact
+                    de l'intelligence artificielle sur la santé et la sécurité au travail à l'horizon 2035,
+                    identifiant les opportunités et les risques pour le bien-être des salariés.</p>
+                  <a href="https://www.inrs.fr/media.html?refINRS=PV%2020" target="_blank" rel="noopener"
+                    class="veille-link">INRS — IA et santé au travail →</a>
+                </div>
+              </div>
+
+              <div class="veille-item reveal">
+                <div class="veille-item-dot"></div>
+                <div class="veille-item-content">
+                  <span class="veille-badge">2021</span>
+                  <span class="veille-date">28 juin 2021</span>
+                  <h3>OMS : éthique et gouvernance de l'IA pour la santé</h3>
+                  <p>L'Organisation mondiale de la santé publie un rapport fondateur sur l'éthique et la gouvernance
+                    de l'intelligence artificielle pour la santé, définissant six principes consensuels pour garantir
+                    que l'IA serve l'intérêt public, y compris la protection des travailleurs.</p>
+                  <a href="https://www.who.int/publications/i/item/9789240029200" target="_blank" rel="noopener"
+                    class="veille-link">OMS — Éthique et gouvernance de l'IA →</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div> <!-- Fin veille-pages-wrapper -->
+
+
+        <!-- Navigation du carrousel : boutons + points + compteur -->
+        <div class="veille-nav reveal">
+          <!-- Bouton Précédent (disabled par défaut car on est déjà à la page 1) -->
+          <button class="veille-nav-btn veille-prev" id="veillePrev" aria-label="Page précédente" disabled>
+            <svg viewBox="0 0 24 24" width="20" height="20">
+              <path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+            </svg>
+            <span>Précédent</span>
+          </button>
+          <!-- Les petits points de pagination (un par page) -->
+          <div class="veille-dots" id="veilleDots">
+            <button class="veille-dot active" data-page="0" aria-label="Page 1"></button>
+            <button class="veille-dot" data-page="1" aria-label="Page 2"></button>
+            <button class="veille-dot" data-page="2" aria-label="Page 3"></button>
+            <button class="veille-dot" data-page="3" aria-label="Page 4"></button>
+          </div>
+          <!-- Bouton Suivant -->
+          <button class="veille-nav-btn veille-next" id="veilleNext" aria-label="Page suivante">
+            <span>Suivant</span>
+            <svg viewBox="0 0 24 24" width="20" height="20">
+              <path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+            </svg>
+          </button>
+        </div>
+        <p class="veille-counter reveal" id="veilleCounter">Page 1 / 4</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════ STAGES ═══════════════
+       Section 08 — Mes rapports de stage (avec PDF intégrés).
+       
+       Présenté sous forme d'accordéon :
+       - En cliquant sur l'en-tête d'un stage, le contenu se déplie/replie
+       - Le contenu est divisé en 2 colonnes :
+         • Gauche (stage-info) → description du stage (que tu devra remplir)
+         • Droite (stage-pdf-side) → le PDF intégré + boutons de téléchargement
+       
+       ⚠️ Les fichiers PDF doivent être placés dans le dossier docs/ :
+          - docs/rapport-stage-1.pdf
+          - docs/rapport-stage-2.pdf
+       
+       💡 La fonction toggleStage() dans script.js gère l'ouverture/fermeture.
+          Le CSS anime la transition avec max-height et opacity.
+  -->
+ <section class="section stages" id="stages">
+  <div class="container">
+
+    <div class="section-header reveal">
+      <span class="section-tag">08</span>
+      <h2 class="section-title">Mes Stages</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="stages-accordion">
+
+      <!-- ===== STAGE 1ERE ANNEE ===== -->
+      <div class="stage-panel reveal" data-stage="1">
+
+        <button class="stage-panel-header"
+                aria-expanded="true"
+                onclick="toggleStage(this)">
+
+          <div class="stage-panel-header-left">
+            <div class="stage-year-badge">1ère année</div>
+            <h3 class="stage-title">Stage de première année</h3>
+            <span class="stage-period">2024 — 2025</span>
+          </div>
+
+          <svg class="stage-chevron" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor"
+                  d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/>
+          </svg>
+        </button>
+
+        <!-- ===== CONTENU ===== -->
+        <div class="stage-panel-body open">
+          <div class="stage-content">
+
+            <!-- DESCRIPTION -->
+            <div class="stage-text">
+              <p>
+                <strong>ENC Bessières</strong> - Stage de première année portant sur la dématérialisation des inscriptions administratives de l'établissement.
+              </p>
+
+              <br>
+
+              <p><strong>Missions principales :</strong></p>
+              <p>
+                → <strong>Développement Web :</strong> Conception et réalisation d'un formulaire d'inscription dynamique avec <strong>PHP</strong> et <strong>JavaScript</strong>.<br>
+                → <strong>Module de Paiement :</strong> Intégration d'un système de paiement sécurisé par carte bancaire pour les frais d'inscription.<br>
+                → <strong>Gestion de Données :</strong> Mise en œuvre du stockage et de la persistance des dossiers via une base de données <strong>MySQL</strong>.
+              </p>
+            </div>
+
+            <!-- ACTIONS A DROITE -->
+            <div class="stage-links">
+              <a href="https://inscriptions.enc-bessieres.org/inscription/public/"
+                 target="_blank"
+                 class="btn btn--primary btn--sm">
+                Voir l'application
+              </a>
+
+              <a href="https://inscriptions.enc-bessieres.org/inscription/public/"
+                 target="_blank"
+                 class="btn btn--outline btn--sm">
+                Ouvrir
+              </a>
+
+              <a href="https://inscriptions.enc-bessieres.org/inscription/public/"
+                 target="_blank"
+                 class="btn btn--primary btn--sm">
+                Plein écran
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <!-- ===== FIN STAGE 1 ===== -->
+
+      <!-- ===== STAGE 2EME ANNEE ===== -->
+      <div class="stage-panel reveal" data-stage="2">
+
+        <button class="stage-panel-header"
+                aria-expanded="true"
+                onclick="toggleStage(this)">
+
+          <div class="stage-panel-header-left">
+            <div class="stage-year-badge">2ème année</div>
+            <h3 class="stage-title">Stage de deuxième année</h3>
+            <span class="stage-period">2025 — 2026</span>
+          </div>
+
+          <svg class="stage-chevron" viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor"
+                  d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/>
+          </svg>
+        </button>
+
+        <div class="stage-panel-body open">
+          <div class="stage-content">
+
+            <!-- DESCRIPTION -->
+            <div class="stage-text">
+              <p>
+                <strong>Association Keur Kamer</strong> - Projet de fin d'études axé sur le développement d'un site
+                web moderne et interactif.
+              </p>
+
+              <br>
+
+              <p><strong>Missions principales :</strong></p>
+              <p>
+                → <strong>Développement Frontend :</strong> Conception complète de l'interface utilisateur avec le framework <strong>React.js</strong>.<br>
+                → <strong>UI / UX Design :</strong> Création de maquettes, d'animations fluides, et garantie de l'accessibilité sur tous les appareils.<br>
+                → <strong>Déploiement :</strong> Mise en ligne du site web et optimisations des performances.
+              </p>
+            </div>
+
+            <!-- ACTIONS A DROITE -->
+            <div class="stage-links">
+              <a href="https://github.com/sab567/Konli.git"
+                 target="_blank"
+                 class="btn btn--primary btn--sm">
+                Voir le GitHub
+              </a>
+
+              <a href="docs/rapport-stage-2.pdf"
+                 target="_blank"
+                 class="btn btn--outline btn--sm">
+                Ouvrir le rapport
+              </a>
+
+              <a href="docs/rapport-stage-2.pdf"
+                 target="_blank"
+                 class="btn btn--primary btn--sm">
+                Plein écran
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <!-- ===== FIN STAGE 2 ===== -->
+
+    </div>
+  </div>
+</section>
+
+  <!-- ═══════════════ FICHE DE SYNTHÈSE ═══════════════
+       Section 09 — Lien vers le tableau de synthèse BTS SIO.
+       
+       C'est une section simple avec une carte qui contient :
+       - Une icône de document
+       - Un titre et une description
+       - Un bouton pour ouvrir le PDF dans un nouvel onglet
+       
+       ⚠️ Le fichier doit être placé dans docs/fiche-synthese.pdf
+  -->
+  <section class="section synthese" id="synthese">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">09</span>
+        <h2 class="section-title">Fiche de Synthèse</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="synthese-content reveal">
+        <div class="synthese-card">
+          <div class="synthese-icon">
+            <svg viewBox="0 0 24 24" width="48" height="48">
+              <path fill="currentColor"
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM9 13h6v2H9v-2zm0 4h6v2H9v-2zm0-8h2v2H9V9z" />
+            </svg>
+          </div>
+          <h3>Tableau de synthèse BTS SIO</h3>
+          <p>Consultez ma fiche de synthèse regroupant l'ensemble de mes compétences et réalisations durant le BTS SIO
+            SLAM.</p>
+          <a href="docs/fiche-synthese.pdf" target="_blank" class="btn btn--primary btn--sm">
+            <svg viewBox="0 0 24 24" width="16" height="16">
+              <path fill="currentColor"
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6z" />
+            </svg>
+            <span>Visualiser la fiche</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ CONTACT ═══════════════
+       Section 10 — Le formulaire de contact.
+       
+       Utilise FORMSPREE pour envoyer les messages sans backend !
+       
+       ⚠️ IMPORTANT : il faut remplacer {VOTRE_ID} par ton vrai ID Formspree.
+          il faudra que tu crées un compte sur formspree.io et que tu remplaces {VOTRE_ID} par ton vrai ID Formspree.
+       
+       Le formulaire envoie 3 champs :
+       - email → l'email de la personne qui te contacte
+       - subject → l'objet du message
+       - message → le contenu du message
+       
+       Formspree s'occupe de t'envoyer un email avec ces infos.
+       Le JavaScript dans script.js ajoute un feedback visuel après l'envoi
+       (le bouton devient vert avec un check ✓).
+  -->
+  <section class="section contact" id="contact">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">10</span>
+        <h2 class="section-title">Me Contacter</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <h3>Envie de collaborer ?</h3>
+          <p>N'hésitez pas à me contacter pour discuter d'un projet, d'une opportunité de stage ou simplement pour
+            échanger.</p>
+        </div>
+        <!-- Formulaire de contact — Formspree
+             action → l'URL de Formspree où les données sont envoyées
+             method="POST" → la méthode HTTP pour envoyer les données
+             ⚠️ Remplace {VOTRE_ID} par ton ID Formspree ! -->
+        <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/xqeyweda" method="POST">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="subject">Objet</label>
+            <input type="text" id="subject" name="subject" placeholder="Sujet de votre message" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Votre message..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--full">
+            <span>Envoyer le message</span>
+            <svg viewBox="0 0 24 24" width="18" height="18">
+              <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FOOTER ═══════════════ 
+       Le pied de page tout simple avec juste le nom. -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <p class="footer-name">Sabetha Poothapillai</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- On charge le JavaScript à la fin du body pour que le HTML soit déjà chargé
+       quand le script s'exécute (sinon il ne trouverait pas les éléments !) -->
+  <script src="script.js"></script>
+</body>
+
+</html>
+<!-- 🌟 Fin du portfolio ! Merci d'avoir lu le code source 💜 -->

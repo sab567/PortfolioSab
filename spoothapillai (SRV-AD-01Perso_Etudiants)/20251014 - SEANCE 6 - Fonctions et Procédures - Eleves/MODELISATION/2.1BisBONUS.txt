@@ -1,0 +1,11 @@
+Pour valider la question de modélisation 2.1, ci dessous les requêtes à effectuer qui doivent être POSSIBLE avec votre modélisation.
+
+-- Scénario 1: Samira Ghalam crée un message (décrit dans le Document B3)
+
+-- Scénario 2: Fabien Leroux consulte la fiche d'un premier élève (décrit dans le Document B3)
+
+-- Scénario 3: Fabien Leroux consulte la fiche d'un second élève (décrit dans le Document B3)
+
+-- Scénario 4: Fabien Leroux supprime la fiche d'un élève (illustré dans le Document B4)
+
+-- Scénario 5: Paul Durand (Directeur) modifie un enregistrement dans la table Formateur

@@ -1,0 +1,8 @@
+https://github.com/timotirob/bloc3
+
+Partie Webcaisse
+etudesdecas/webcaisse
+
+Restiloc : études de cas + prototype
+QuestionsWebcaisse
+Evaluation S2: les 5 TP (études de cas) avec Prototype opérationnel perso (GitHub ou gitlab) + questions maitrisées (interro orale)

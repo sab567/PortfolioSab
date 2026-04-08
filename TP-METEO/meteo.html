@@ -1,0 +1,17 @@
+<html> <!-- On commence le document html -->
+
+<head> <!-- on ouvre l'entête de la page -->
+    <link rel="stylesheet" href="meteo.css"> <!-- On met un lien vers le fichier de style -->
+    <title>Météo</title> <!-- On met le titre de la page, qui s'affichera dans l'onglet -->
+</head>:<!-- On ferme l'entête de la page -->
+
+<body> <!-- On ouvre le corps de la page --> 
+    <h1>Bienvenue dans notre serie televisée préférée, la météo</h1>  <!-- On met le texte d'acceuile -->
+    <input type="text" id="villeInput" placeholder="Entre ta ville">  <!--On met un champ de saisie, ou l'utilisateur entrera une ville -->
+    <select id="villeListe"></select> <!-- On met une liste ou les ville correspondante apparaiseront -->
+    <button onclick="obtenirMeteo()">Et ici, tu obtiendras finalement la météo</button> <!-- Un bouton ou l'utilisateur, si il appuis, pourra voir la météo de la ville que il a choisis -->
+    <div id="resultat"></div> <!-- Une section ou le resultat, donc la meteo sera affiché, por le moment, il sera vide -->
+    <script src="meteo.js"></script>  <!--Lien vers le fichier javascript -->
+</body>  <!-- On ferme le corp de la page -->
+
+</html> <!-- Le document html est terminer, donc fermer -->

@@ -1,0 +1,10 @@
+RewriteEngine On
+RewriteBase /
+
+# 1. On ne touche pas aux fichiers qui existent vraiment (images, CSS, chat.php...)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# 2. Tout le reste est redirigé vers index.html (pour que React gère la page)
+RewriteRule ^ index.html [L]

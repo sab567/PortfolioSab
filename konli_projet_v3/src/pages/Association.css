@@ -1,0 +1,67 @@
+/* STYLES DES STATUTS */
+
+.page-header {
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 60px 20px;
+    background-color: var(--color-bg-light);
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: var(--color-text-light);
+    font-size: 1.1rem;
+}
+
+.articles-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+}
+
+.statuts-article {
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #eee;
+}
+
+.statuts-article:last-child {
+    border-bottom: none;
+}
+
+.statuts-article h2 {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    margin-bottom: 20px;
+    padding-left: 15px;
+    border-left: 4px solid var(--color-accent);
+    /* Ligne rouge élégante à gauche du titre */
+}
+
+.statuts-article p,
+.statuts-article li {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--color-text-main);
+    margin-bottom: 15px;
+}
+
+.statuts-article ul {
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+.statuts-article li {
+    margin-bottom: 10px;
+}
+
+.note {
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+}

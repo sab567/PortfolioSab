@@ -1,0 +1,32 @@
+https://www.codingame.com/clashofcode/clash/4000937f3c7b698dbfaed2fa7860657dfac1dff
+
+JS:
+const N = parseInt(readline());
+let sommePair = 0 ;
+let sommeImpair = 0 ;
+for (let i = 0; i < N; i++) {
+    const M = parseInt(readline());
+    if (M % 2 ==0) sommePair = sommePair + M ;
+    else sommeImpair = sommeImpair + M ;
+}
+
+// Write an answer using console.log()
+// To debug: console.error('Debug messages...');
+
+console.log(sommePair+' '+sommeImpair);
+
+Python:
+sommePair = 0
+sommeImpair = 0
+n = int(input())
+for i in range(n):
+    m = int(input())
+    if (m % 2 ==0):
+        sommePair = sommePair + m 
+    else:
+        sommeImpair = sommeImpair + m
+
+# Write an answer using print
+# To debug: print("Debug messages...", file=sys.stderr, flush=True)
+
+print(f"{sommePair} {sommeImpair}")
