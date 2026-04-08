@@ -1,0 +1,318 @@
+= TP - Authentification Web II : JSON Web Tokens (JWT)
+:author: Timothée Robert
+:revdate: 2025-11-18
+:version-label: Sujet TP
+:toc: left
+:toclevels: 3
+:sectnums:
+:source-highlighter: highlight.js
+:imagesdir: images
+
+image::developpeur.png[Image d'un développeur travaillant sur la sécurité NodeJS]
+
+== Introduction
+
+=== Objectifs
+* Comprendre et implémenter l’authentification basée sur JWT (JSON Web Tokens).
+* Gérer les tokens de rafraîchissement (Refresh Tokens) pour une authentification durable.
+* Journaliser (loguer) les activités des utilisateurs pour un suivi des actions.
+* Revoir le hachage sécurisé avec **Argon2**.
+* Utiliser l'ORM **Sequelize** pour l'interaction avec la BDD.
+
+=== Principe de JWT et positionnement
+
+L'objectif de JWT (JSON Web Tokens) est de permettre une authentification **sans état** (stateless). Le serveur n'a pas besoin de stocker les informations de session. À la place, il encode les informations utilisateur (comme son ID) directement dans un **token** signé et le renvoie au client.
+
+Ce token est inclus par le client dans chaque requête (généralement dans l'en-tête `Authorization`), permettant au serveur de vérifier l'identité de l'utilisateur sans consulter une base de données de session.
+
+.JWT (Stateless) vs. Sessions (Stateful)
+* **Sessions (TP précédent) :** Approche *avec état* (stateful). Le serveur stocke les données de session (en mémoire, fichier, ou BDD) et envoie un simple ID (cookie) au client.
+* **JWT (ce TP) :** Approche *sans état* (stateless). Le serveur ne stocke rien. Le token est auto-suffisant. C'est idéal pour les API REST et les microservices.
+
+=== Principes des tokens (jetons)
+
+Un token est une chaîne de caractères générée par la librairie `jsonwebtoken` pour authentifier un utilisateur.
+
+.Création des tokens (au Login)
+Les tokens sont créés au **login**, et non à l'enregistrement.
+
+* **Enregistrement :** L'objectif est de *créer* un compte. Les données (login, mot de passe haché) sont stockées en BDD.
+* **Login :** L'objectif est d'*authentifier* un utilisateur existant. Le serveur vérifie les identifiants et, s'ils sont corrects, génère un **Access Token** (jeton d'accès) et un **Refresh Token** (jeton de rafraîchissement).
+
+.Rafraîchissement des tokens
+Pour la sécurité, les **Access Tokens** ont une durée de vie très courte (ex: 15 minutes). S'il est volé, il expire rapidement.
+Le **Refresh Token** est un second token, avec une durée de vie beaucoup plus longue (ex: 7 jours).
+
+* Il est stocké de manière plus sécurisée (ex: dans un cookie `HttpOnly`).
+* Son seul but est de permettre au client de demander un *nouvel* Access Token lorsque l'ancien a expiré, sans que l'utilisateur ait à se reconnecter.
+
+.Transmission et Stockage
+* **Access Token :** Généralement stocké côté client en mémoire (variable JavaScript) et envoyé dans l'en-tête `Authorization: Bearer <token>`.
+* **Refresh Token :** Stocké côté client dans un cookie `HttpOnly` (inaccessible par JavaScript) et côté serveur dans une base de données (pour pouvoir le révoquer).
+
+== Mise en place du projet
+
+=== 1. Configuration initiale
+
+. Créez un dossier de projet et initialisez un projet Node.js (`npm init -y`).
+. Ajoutez `"type": "module"` dans votre `package.json`.
+. Installez les dépendances nécessaires :
++
+[source,bash]
+----
+npm install express jsonwebtoken @node-rs/argon2 mysql2 sequelize dotenv cookie-parser
+npm install --save-dev nodemon
+----
+
+=== 2. Configuration de l'environnement
+
+Créez un fichier `.env` à la racine avec les informations suivantes (adaptez vos identifiants) :
+
+[source,ini]
+----
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=tp_jwt
+SECRET_KEY=votre_phrase_secrete_pour_access_token
+REFRESH_SECRET_KEY=votre_phrase_secrete_pour_refresh_token
+----
+
+=== 3. Configuration de la Base de Données (Modèles)
+
+Créez un dossier `models` et un fichier `index.js` dedans. Ce code vous est fourni pour configurer Sequelize.
+
+.`models/index.js`
+[source,javascript]
+----
+import { Sequelize, DataTypes, Op } from 'sequelize';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const sequelize = new Sequelize(
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,
+    {
+        host: process.env.DB_HOST,
+        dialect: 'mysql',
+    }
+);
+
+// --- Définition des Modèles ---
+
+const User = sequelize.define('User', {
+    login: { type: DataTypes.STRING, allowNull: false, unique: true },
+    password: { type: DataTypes.STRING, allowNull: false },
+    email: { type: DataTypes.STRING, allowNull: false, unique: true },
+}, { timestamps: true });
+
+const RefreshToken = sequelize.define('RefreshToken', {
+    token: { type: DataTypes.STRING, allowNull: false },
+    userId: { type: DataTypes.INTEGER, allowNull: false },
+}, { timestamps: true });
+
+const ActivityLog = sequelize.define('ActivityLog', {
+    userId: { type: DataTypes.INTEGER, allowNull: false },
+    activity: { type: DataTypes.STRING, allowNull: false },
+}, { timestamps: true });
+
+// --- Synchronisation et Nettoyage ---
+
+sequelize.sync()
+    .then(() =>{
+        console.log('Database synchronisée');
+        // Nettoyage périodique des vieux tokens (> 7 jours)
+        setInterval(async () => {
+            const now = new Date();
+            await RefreshToken.destroy({
+                where: { createdAt: { [Op.lt]: new Date(now - 7 * 24 * 60 * 60 * 1000) } },
+            });
+            console.log('Nettoyage des tokens expirés.');
+        }, 24 * 60 * 60 * 1000);
+    })
+    .catch(err => console.error('Erreur de synchronisation:', err));
+
+export { sequelize, User, RefreshToken, ActivityLog };
+----
+
+=== 4. Serveur Express (À compléter)
+
+Créez le fichier principal `index.js`. Voici la structure de base à compléter.
+
+.`index.js`
+[source,javascript]
+----
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import argon2 from 'argon2';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import cookieParser from 'cookie-parser';
+import { User, RefreshToken, ActivityLog } from './models/index.js';
+
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+
+// Middlewares
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cookieParser());
+app.use('/static', express.static(path.join(__dirname, 'static')));
+
+const SECRET_KEY = process.env.SECRET_KEY;
+const REFRESH_SECRET_KEY = process.env.REFRESH_SECRET_KEY;
+
+// Routes de base pour servir les pages HTML
+app.get("/", (req, res) => res.sendFile(__dirname + "/pages/enregistrement.html"));
+app.get("/login", (req, res) => res.sendFile(__dirname + "/pages/login.html"));
+app.get("/logout", (req, res) => res.sendFile(__dirname + "/pages/logout.html"));
+app.get("/accesProfil", (req, res) => res.sendFile(__dirname + "/pages/profil.html"));
+
+// --- VOTRE TRAVAIL COMMENCE ICI ---
+
+// TODO 1 : Implémenter la route POST /enregistrement
+// Elle doit créer un utilisateur avec un mot de passe haché (Argon2).
+
+// TODO 2 : Implémenter la route POST /login
+// Elle doit vérifier le mot de passe, créer un AccessToken et un RefreshToken.
+// Le RefreshToken doit être stocké en BDD et envoyé en Cookie HttpOnly.
+
+// TODO 3 : Implémenter la route POST /logout
+// Elle doit supprimer le RefreshToken de la BDD et effacer le cookie.
+
+// TODO 4 : Implémenter la route POST /token
+// Elle doit permettre de renouveler un AccessToken à partir du cookie RefreshToken.
+
+// TODO 5 : Créer un middleware 'authenticateToken'
+// Il doit vérifier la validité de l'AccessToken envoyé dans le header Authorization.
+
+// TODO 6 : Implémenter la route GET /profil
+// C'est une route protégée qui utilise le middleware ci-dessus.
+
+// --- Fin de votre travail ---
+
+if (process.env.NODE_ENV !== 'test') {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => console.log(`Serveur lancé sur http://localhost:${PORT}`));
+}
+
+export default app;
+----
+
+== Travail à faire : Serveur
+
+Complétez le fichier `index.js` en implémentant les routes manquantes décrites dans les commentaires TODO.
+
+=== Route d'enregistrement
+* Utilisez `argon2.hash()` pour sécuriser le mot de passe.
+* Utilisez `User.create()` pour insérer en base.
+* Ajoutez une entrée dans `ActivityLog`.
+
+=== Route de Login
+* Vérifiez l'utilisateur et le mot de passe (`argon2.verify`).
+* Générez un **Access Token** (durée courte : 15 min) avec `jwt.sign`.
+* Générez un **Refresh Token** (durée longue : 7 jours).
+* Stockez le Refresh Token en base via `RefreshToken.create`.
+* Envoyez le Refresh Token au client via un cookie sécurisé (`res.cookie` avec `httpOnly: true`).
+* Renvoyez l'Access Token dans le corps de la réponse JSON.
+
+=== Route de Rafraîchissement (`/token`)
+* Récupérez le token depuis les cookies (`req.cookies`).
+* Vérifiez s'il existe en base de données.
+* Vérifiez sa signature avec `jwt.verify`.
+* Si tout est bon, générez et renvoyez un nouvel Access Token.
+
+== Travail à faire : Client
+
+Dans le dossier `static`, créez un fichier `scriptFetch.js`. Ce script sera utilisé par la page `profil.html`.
+
+Il doit contenir une fonction `apiFetch(url, options)` qui :
+1.  Ajoute l'Access Token (stocké en mémoire) dans l'en-tête `Authorization`.
+2.  Effectue la requête `fetch`.
+3.  Si la réponse est 401 (Non autorisé / Token expiré) :
+* Appelle la route `/token` pour obtenir un nouveau token.
+* Si le renouvellement fonctionne, met à jour le token en mémoire et rejoue la requête initiale.
+* Sinon, redirige vers la page de login.
+
+== Exercices d'analyse
+
+. **Rôle des tokens :** Expliquez pourquoi on utilise deux tokens (Access et Refresh) au lieu d'un seul token avec une durée de vie longue.
+. **Paramétrage :** Modifiez votre code pour que l'Access Token dure seulement 10 secondes. Testez l'accès au profil. Que se passe-t-il après 10 secondes ? Le mécanisme de rafraîchissement fonctionne-t-il ?
+. **Postman :** Testez vos routes API (`/login`, `/profil`) avec Postman. Montrez que vous ne pouvez pas accéder à `/profil` sans fournir le token dans le Header `Authorization`.
+
+== Annexes : Fichiers HTML
+
+Voici les fichiers HTML de base à placer dans le dossier `pages`.
+
+.`pages/enregistrement.html`
+[source,html]
+----
+<html><body>
+<form action="/enregistrement" method="POST">
+    Login: <input type="text" name="identifiant"><br>
+    Email: <input type="text" name="email"><br>
+    Mdp: <input type="password" name="motDePasse"><br>
+    <button type="submit">S'inscrire</button>
+</form>
+</body></html>
+----
+
+.`pages/login.html`
+[source,html]
+----
+<html><body>
+<form id="loginForm">
+    Login: <input type="text" id="identifiant"><br>
+    Mdp: <input type="password" id="motDePasse"><br>
+    <button type="submit">Se connecter</button>
+</form>
+<script>
+    // Script simple pour envoyer le login en JSON et récupérer le token
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const identifiant = document.getElementById('identifiant').value;
+        const motDePasse = document.getElementById('motDePasse').value;
+
+        const res = await fetch('/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ identifiantFormulaire: identifiant, motDePasseFormulaire: motDePasse })
+        });
+
+        const data = await res.json();
+        if(res.ok) {
+            // Stockage temporaire pour la démo (à améliorer dans le scriptFetch.js)
+            alert('Connecté ! Token reçu : ' + data.accessToken);
+            window.location.href = '/accesProfil';
+        } else {
+            alert('Erreur : ' + data.message);
+        }
+    });
+</script>
+</body></html>
+----
+
+.`pages/profil.html`
+[source,html]
+----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil</title>
+</head>
+<body>
+    <h1>Zone Protégée</h1>
+    <button id="getProfile">Accéder au Profil</button>
+    <div id="resultat"></div>
+    <script src="/static/scriptFetch.js"></script>
+</body>
+</html>
+----
