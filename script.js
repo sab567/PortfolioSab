@@ -1,7 +1,4 @@
-/* ══════════════════════════════════════════════════════════════════════════════
-   LA GRANDE DAME SABETHA POOTHAPILLAI      
-   ══════════════════════════════════════════════════════════════════════════════
-   
+/* 
    Hey ! nous nous retrouvons ! voici donc les commentaires pour t'aider à comprendre ce code
    
    Ce fichier contient TOUTE la logique interactive du site :
@@ -667,7 +664,7 @@ if (contactForm) {
       var dot = document.createElement('div');
       var dotSize = Math.max(12 - (t * 0.8), 2);            // Plus gros au début, finissent petits
       var dotOpacity = Math.max(0.4 - (t * 0.03), 0);       // Dégradé d'opacité
-      dot.style.cssText = 'position:fixed;width:' + dotSize + 'px;height:' + dotSize + 'px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,157,' + dotOpacity + '),transparent);box-shadow:0 0 ' + (15 - t) + 'px rgba(255,107,157,' + (dotOpacity / 2) + ');pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:opacity 0.3s;';
+      dot.style.cssText = 'position:absolute;width:' + dotSize + 'px;height:' + dotSize + 'px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,157,' + dotOpacity + '),transparent);box-shadow:0 0 ' + (15 - t) + 'px rgba(255,107,157,' + (dotOpacity / 2) + ');pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:opacity 0.3s;';
       document.body.appendChild(dot);
       trailDots.push(dot);
       trailPositions.push({ x: 0, y: 0 });
@@ -676,8 +673,8 @@ if (contactForm) {
     // On enregistre la position de la souris à chaque mouvement
     var trailMouseX = 0, trailMouseY = 0;
     document.addEventListener('mousemove', function (e) {
-      trailMouseX = e.clientX;
-      trailMouseY = e.clientY;
+      trailMouseX = e.pageX;
+      trailMouseY = e.pageY;
     }, { passive: true });
 
     // Boucle d'animation : chaque point suit le précédent avec du retard
@@ -1011,14 +1008,14 @@ if (contactForm) {
      ───────────────────────────────────────────────────────────────────────── */
   if (window.innerWidth > 768) {
     var spotlight = document.createElement('div');
-    spotlight.style.cssText = 'position:fixed;width:500px;height:500px;border-radius:50%;pointer-events:none;z-index:9999;mix-blend-mode:soft-light;opacity:0;transition:opacity 0.5s ease;background:radial-gradient(circle,rgba(255,107,157,0.15) 0%,rgba(124,107,181,0.08) 30%,transparent 70%);transform:translate(-50%,-50%);';
+    spotlight.style.cssText = 'position:absolute;width:500px;height:500px;border-radius:50%;pointer-events:none;z-index:9999;mix-blend-mode:soft-light;opacity:0;transition:opacity 0.5s ease;background:radial-gradient(circle,rgba(255,107,157,0.15) 0%,rgba(124,107,181,0.08) 30%,transparent 70%);transform:translate(-50%,-50%);';
     document.body.appendChild(spotlight);
 
     var spotX = 0, spotY = 0, currentSpotX = 0, currentSpotY = 0;
 
     document.addEventListener('mousemove', function (e) {
-      spotX = e.clientX;
-      spotY = e.clientY;
+      spotX = e.pageX;
+      spotY = e.pageY;
       spotlight.style.opacity = '1';
     });
 
